@@ -139,7 +139,7 @@ domEventPromise(knopka, "click").then((e) =>
   console.log("event click happens", e)
 );
 
-// ======= отстой а не мастер Йода, выдает ошибки и не раскрывает все ссылки
+// ======= мастер Й-ЙОДА 
 async function swapiLinks(url) {
   const response = await fetch(url);
   const data = await response.json();
@@ -152,15 +152,17 @@ async function swapiLinks(url) {
       const respData = await resp.json();
       data[i] = respData;
       allRromises.push(data[i]);
-    } else {
+    } else 
       if (Array.isArray(data[i])) {
-        for (let k of data[i])
-          if (typeof k === "string" && k.includes("http"))
-          {
-            swapiLinks(k);
+        for (let k in data[i])
+          if (typeof data[i][k] === "string" && data[i][k].includes("http"))
+          {const resp = await fetch(data[i][k]);
+            const respData = await resp.json();
+            data[i][k] = respData;
+            allRromises.push(data[i][k]);            
           }
       }
-    }
+    
   }
 
   await Promise.all(allRromises);
@@ -170,3 +172,7 @@ async function swapiLinks(url) {
 swapiLinks("https://swapi.dev/api/people/20/").then((yodaWithLinks) =>
   console.log(JSON.stringify(yodaWithLinks, null, 4))
 );
+
+
+
+
